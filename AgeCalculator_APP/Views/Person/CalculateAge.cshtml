@@ -1,0 +1,217 @@
+﻿@using AgeCalculator_APP.Models.Entity
+@model PersonViewModel
+
+@{
+    ViewData["Title"] = "CalculateAge";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html lang="en">
+<body>
+    <div class="text-center">
+        <hr />
+        <br />
+        <h1 class="display-4">Yaş Hesaplama Uygulaması</h1>
+        <hr />
+        <br />
+        <div style="text-align:center">
+            <p>Yaşınızı hesaplamak için bilgilerinizi giriniz:</p>
+        </div>
+        <hr />
+    </div>
+
+    @using (Html.BeginForm("Calculate", "Person", FormMethod.Post))
+    {
+        <div>
+            <table>
+                <tr>
+                    <td>
+                        <div style="margin-bottom:5px">
+                            <img id="imageResult" src="~/Images/icon.jpg" alt="" style="width:300px; height:300px; border:groove; border-radius:50%">
+                        </div>
+                        <div>
+                            <input id="upload" type="file" style="border-radius: 10px;border: groove;width: 300px;" onchange="readURL(this);">
+                        </div>
+                    </td>
+                    <td>
+                        <div style="width:200px">
+
+                        </div>
+                    </td>
+                    <td>
+                        <table>
+                            <tr>
+                                <td>
+                                    <div style="width: 120px; margin-top: 21.4px">
+                                        @Html.LabelFor(x => x.Name): 
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.Name, "", new { @style = "color:red" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="width: 120px; margin-top: 21.4px">
+                                        @Html.LabelFor(x => x.Surname): 
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(m => m.Surname, "", new { @style = "color:red" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="width: 120px; margin-top: 21.4px">
+                                        @Html.LabelFor(x => x.BirthDate): 
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        @Html.TextBox("txtBirthDate", Model.BirthDate, "{0:yyyy-MM-dd}", new { @style = "width:100%", type = "date"})
+                                        @Html.ValidationMessageFor(m => m.BirthDate, "", new { @style = "color:red" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="width: 120px; margin-top: 21.4px">
+                                        @Html.LabelFor(x => x.Gender): 
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        <select class="form-control" id="Gender" name="Gender" type="" value="">
+                                            <option value="1">Kadın</option>
+                                            <option value="2">Erkek</option>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="width: 120px; margin-top: 21.4px">
+                                        @Html.LabelFor(x=>x.Cities): 
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        @Html.DropDownListFor(m => m.CityID, new SelectList(Model.Cities, "CityID", "CityName"), "Yaşadığınız Şehri Seçiniz", new
+                                       {
+                                           @id = "cmb-sehirler",
+                                           @class = "form-control custom-select selectpicker",
+                                           @data_width = "auto",
+                                           @liveSearch = "true"
+                                       })
+                                        @Html.ValidationMessageFor(m => m.CityID, "", new { @style = "color:red" })
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="width: 120px; margin-top: 21.4px">
+                                        @Html.LabelFor(x => x.Age): 
+                                    </div>
+                                </td>
+                                <td>
+                                    <div>
+                                        @(Model.Age == 0 ? "" : Model.Age.ToString())
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <form class="form-group" method="post">
+                                        <div>
+                                            @*<a href="/Person/Calculate/@Model" class="btn btn-success">Hesapla</a>*@
+                                            <input class="form-control" id="Hesapla" name="Hesapla" type="submit" value="Hesapla" 
+                                                   onclick="location.href='@Url.Action("Calculate", "Person",Model)'"/>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <script>
+
+            $('#BirthDate').datepicker({
+                changeMonth: true, changeYear: true,
+                minDate: '01/01/1900', maxDate: new Date
+            });
+
+            if ($("#BirthDate").val() != '') {
+                var arrDate = $('#BirthDate').val().split(" ");
+                $('#BirthDate').val(arrDate[0]);
+            }
+            
+
+            /*  ==========================================
+                SHOW UPLOADED IMAGE
+            * ========================================== */
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#imageResult')
+                            .attr('src', e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+                else {
+                    $('#imageResult').attr('src', "~/Images/icon.jpg");
+                }
+            }
+
+            $('#myForm').submit(function () {
+                // DO STUFF...
+                var result = checkFileSize(document.getElementById("imageResult"));
+                console.log(result);
+                return result; // return false to cancel form action
+            });
+
+            $(function () {
+                $('#upload').on('change', function () {
+                    readURL(input);
+                });
+            });
+
+            /*  ==========================================
+                SHOW UPLOADED IMAGE NAME
+            * ========================================== */
+            var input = document.getElementById('upload');
+            var infoArea = document.getElementById('upload-label');
+
+            input.addEventListener('change', showFileName);
+            function showFileName(event) {
+                var input = event.srcElement;
+                var fileName = input.files[0].name;
+                infoArea.textContent = 'File name: ' + fileName ?? "yok usta";
+            }
+
+            function checkFileSize(input) {
+                var size = input.files[0].size;
+
+                if (size > 52.42880) {
+                    return false;
+                }
+                return true;
+            }
+
+        </script>
+    }
+
+    </body>
+</html>
+
+
+
