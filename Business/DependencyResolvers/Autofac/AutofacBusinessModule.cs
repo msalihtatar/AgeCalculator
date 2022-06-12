@@ -16,9 +16,6 @@ namespace Business.DependencyResolvers.Autofac
             builder.RegisterType<CityManager>().As<ICityService>().SingleInstance();
             builder.RegisterType<DpCityDal>().As<ICityDal>().SingleInstance();
 
-            builder.RegisterType<PhotoManager>().As<IPhotoService>().SingleInstance();
-            builder.RegisterType<DpPhotoDal>().As<IPhotoDal>().SingleInstance();
-
             builder.RegisterType<PersonManager>().As<IPersonService>().SingleInstance();
             builder.RegisterType<DpPersonDal>().As<IPersonDal>().SingleInstance();
 

@@ -12,11 +12,9 @@ namespace Business.Concrete
     public class PersonManager : IPersonService
     {
         IPersonDal _personDal;
-        IPhotoService _photoService;
-        public PersonManager(IPersonDal personDal, IPhotoService photoService)
+        public PersonManager(IPersonDal personDal)
         {
             _personDal = personDal;
-            _photoService = photoService;
         }
 
         private int calculateAge(DateTime birthDate)
@@ -38,11 +36,6 @@ namespace Business.Concrete
                 if (person != null)
                 {
                     Person addPerson = new Person();
-
-                    if (!string.IsNullOrEmpty(person.PhotoFile))
-                    {
-                        
-                    }
 
                     addPerson.Name = person.Name;
                     addPerson.Surname = person.Surname;
