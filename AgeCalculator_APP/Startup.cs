@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -30,7 +32,13 @@ namespace AgeCalculator_APP
             string connstr = this.Configuration.GetConnectionString("dbConnection");
 
             services.AddTransient<IDbConnection>((sp) => new SqlConnection(connstr));
-            
+
+            services.AddSingleton<IFileProvider>(
+            new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
+
+            services.AddMvc();
+
             //services.AddCors();
         }
          

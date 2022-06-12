@@ -1,0 +1,46 @@
+﻿@using AgeCalculator_APP.Models.Entity
+@model List<PersonViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<table id="table1" class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Kişi ID</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Cinsiyet</th>
+            <th>Doğum Tarihi</th>
+            <th>Yaş</th>
+            <th>Şehir</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var person in Model)
+        {
+            <tr>
+                <th>@person.PersonID</th>
+                <td>@person.Name</td>
+                <td>@person.Surname</td>
+                <td>@person.Gender</td>
+                <td>@person.BirthDate</td>
+                <td>@person.Age</td>
+                <td>@person.CityName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js "></script>
+
+<script>
+    $('#table1').dataTable({});
+</script>

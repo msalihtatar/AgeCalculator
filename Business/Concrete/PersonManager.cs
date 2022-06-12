@@ -41,11 +41,7 @@ namespace Business.Concrete
 
                     if (!string.IsNullOrEmpty(person.PhotoFile))
                     {
-                        var result = _photoService.Add(person.PhotoFile);
-                        if (result.Success && result.Data > 0)
-                        {
-                            addPerson.PhotoID = result.Data;
-                        }
+                        
                     }
 
                     addPerson.Name = person.Name;
@@ -53,7 +49,8 @@ namespace Business.Concrete
                     addPerson.BirthDate = person.BirthDate;
                     addPerson.CityID = person.CityID;
                     addPerson.Age = calculateAge(person.BirthDate);
-                    addPerson.Gender = person.Gender == "Erkek" ? 0 : 1; 
+                    addPerson.Gender = person.Gender;
+                    addPerson.PhotoFile = person.PhotoFile;
 
                     var isAdded = _personDal.Add(addPerson);
 
@@ -98,10 +95,10 @@ namespace Business.Concrete
         {
             try
             {
-                var personList = _personDal.GetAll();
+                var personList = _personDal.GetAllPersonDetails();
                 if (personList != null && personList.Count > 0)
                 {
-                    return new SuccessDataResult<List<PersonDetailDTO>>("Kişiler getirildi.");
+                    return new SuccessDataResult<List<PersonDetailDTO>>(personList,"Kişiler getirildi.");
                 }
                 else
                 {

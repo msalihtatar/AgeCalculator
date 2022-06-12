@@ -15,6 +15,6 @@ namespace Entities.DTOs
         public string CityName { get; set; }
         public int Age { get; set; }
         public DateTime BirthDate { get; set; }
-        public string Gender { get; set; }
+        public int Gender { get; set; }
     }
 }

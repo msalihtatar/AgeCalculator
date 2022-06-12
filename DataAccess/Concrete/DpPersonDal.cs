@@ -22,11 +22,19 @@ namespace DataAccess.Concrete
             try
             {
                 string sql = string.Format(System.Globalization.CultureInfo.InvariantCulture,
-                            @"Insert Into Person(PhotoID, CityID ,Name, Surname, Age, BirthDate, Gender)
-                            Values({0}, {1}, '{2}', '{3}', {4}, '{5}', {6})", person.PhotoID, person.CityID,
-                            person.Name, person.Surname, person.Age, person.BirthDate, person.Gender);
+                            @"Insert Into [Person]([PhotoFile], [CityID],[Name], [Surname], [Age], [BirthDate], [Gender])
+                            Values(@PhotoFile, @CityID, @Name, @Surname, @Age, @BirthDate, @Gender)");
 
-                _dbConnection.Execute(sql);
+                _dbConnection.Execute(sql, new
+                {
+                    person.PhotoFile,
+                    person.CityID,
+                    person.Name,
+                    person.Surname,
+                    person.Age,
+                    person.BirthDate,
+                    person.Gender
+                });
                 return true;
             }
             catch (Exception ex)
@@ -54,8 +62,7 @@ namespace DataAccess.Concrete
             try
             {
                 string sql = @"Select * from Person p
-                               Inner Join City c on c.CityID = p.CityID
-                               Left Join Photo ph on ph.PhotoID = p.PhotoID";
+                               Inner Join City c on c.CityID = p.CityID";
 
                 var personList = _dbConnection.Query<PersonDetailDTO>(sql).ToList();
                 return personList;

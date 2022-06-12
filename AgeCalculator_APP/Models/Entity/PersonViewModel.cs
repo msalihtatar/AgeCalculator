@@ -1,4 +1,5 @@
 ﻿using Entities.Concrete;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +11,8 @@ namespace AgeCalculator_APP.Models.Entity
     public class PersonViewModel
     {
         public int PersonID { get; set; }
-        public int PhotoID { get; set; }
+        public IFormFile PhotoFile { get; set; }
+        public string CityName { get; set; }
         [Required(ErrorMessage = "Şehir seçiniz.")]
         public int CityID { get; set; }
         [Display(Name = "Şehir")]

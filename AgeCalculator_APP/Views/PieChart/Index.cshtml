@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="block-all-mixed-content">
+
+
+    <title>Result Visualization</title>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: '@Url.Action("VisualizeGenderResult", "PieChart")',
+                success: function (result) {
+                    google.charts.load('current', {
+                        'packages': ['corechart']
+                    });
+                    google.charts.setOnLoadCallback(function () {
+                        drawChart(result);
+                    });
+                }
+            });
+        });
+
+        function drawChart(result) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Cinsiyet');
+            data.addColumn('number', 'Kişi Sayısı');
+            var dataArray = [];
+
+            $.each(result, function (i, obj) {
+                dataArray.push([obj.gender, obj.count]);
+            });
+            data.addRows(dataArray);
+
+            var columnChartOptions = {
+                title: "Cinsiyete Göre Kayıtlı Kişilerin Oranı - Pie Chart",
+                width: 1000,
+                height: 750,
+                bar: { groupWidth: "20%" },
+            };
+
+            var columnChart = new google.visualization.PieChart(document
+                .getElementById('Piechart_div'));
+
+            columnChart.draw(data, columnChartOptions);
+        }
+    </script>
+</head>
+<body>
+    <div id="Piechart_div"></div>
+</body>
+</html>

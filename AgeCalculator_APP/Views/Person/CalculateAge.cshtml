@@ -7,6 +7,58 @@
 }
 
 <html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script>
+
+        //$('#BirthDate').datetimepicker({
+        //    format: 'MM/DD/YYYY',
+        //    defaultDate: new Date()
+        //});
+
+        /*  ==========================================
+            SHOW UPLOADED IMAGE
+        * ========================================== */
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#imageResult')
+                        .attr('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $(function () {
+            $('#upload').on('change', function () {
+                var size = input.files[0].size;
+                if (size > 5242880) {
+                    alert("Yüklenen dosyanın boyutu en fazla 5 Mb olmalıdır.");
+                }
+                readURL(input);
+            });
+        });
+
+        /*  ==========================================
+            SHOW UPLOADED IMAGE NAME
+        * ========================================== */
+        var input = document.getElementById('upload');
+        var infoArea = document.getElementById('upload-label');
+
+        input.addEventListener('change', showFileName);
+        function showFileName(event) {
+            var input = event.srcElement;
+            var fileName = input.files[0].name;
+            infoArea.textContent = 'File name: ' + fileName ?? "yok usta";
+        }
+    </script>
+</head>
 <body>
     <div class="text-center">
         <hr />
@@ -19,18 +71,27 @@
         </div>
         <hr />
     </div>
-
-    @using (Html.BeginForm("Calculate", "Person", FormMethod.Post))
+    @using (Html.BeginForm("Calculate", "Person", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         <div>
             <table>
                 <tr>
                     <td>
                         <div style="margin-bottom:5px">
-                            <img id="imageResult" src="~/Images/icon.jpg" alt="" style="width:300px; height:300px; border:groove; border-radius:50%">
+                            <img id="imageResult" src="~/Images/icon.jpg" alt="" style="width:300px; height:300px; border:groove; border-radius:50%" />
                         </div>
                         <div>
-                            <input id="upload" type="file" style="border-radius: 10px;border: groove;width: 300px;" onchange="readURL(this);">
+                            @Html.EditorFor(model => model.PhotoFile, new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    @type = "file",
+                                    @onchange = "readURL(this)"
+
+                                }
+                            })
+                            @*<input id="upload" type="file" style="border-radius: 10px;border: groove;width: 300px;" onchange="readURL(this);" />*@
                         </div>
                     </td>
                     <td>
@@ -43,7 +104,7 @@
                             <tr>
                                 <td>
                                     <div style="width: 120px; margin-top: 21.4px">
-                                        @Html.LabelFor(x => x.Name): 
+                                        @Html.LabelFor(x => x.Name):
                                     </div>
                                 </td>
                                 <td>
@@ -56,7 +117,7 @@
                             <tr>
                                 <td>
                                     <div style="width: 120px; margin-top: 21.4px">
-                                        @Html.LabelFor(x => x.Surname): 
+                                        @Html.LabelFor(x => x.Surname):
                                     </div>
                                 </td>
                                 <td>
@@ -69,12 +130,12 @@
                             <tr>
                                 <td>
                                     <div style="width: 120px; margin-top: 21.4px">
-                                        @Html.LabelFor(x => x.BirthDate): 
+                                        @Html.LabelFor(x => x.BirthDate):
                                     </div>
                                 </td>
                                 <td>
                                     <div>
-                                        @Html.TextBox("txtBirthDate", Model.BirthDate, "{0:yyyy-MM-dd}", new { @style = "width:100%", type = "date"})
+                                        @Html.TextBoxFor(model => model.BirthDate, new { @type = "date", @class = "form-control datepicker", @Value = Model.BirthDate.ToString() })
                                         @Html.ValidationMessageFor(m => m.BirthDate, "", new { @style = "color:red" })
                                     </div>
                                 </td>
@@ -82,7 +143,7 @@
                             <tr>
                                 <td>
                                     <div style="width: 120px; margin-top: 21.4px">
-                                        @Html.LabelFor(x => x.Gender): 
+                                        @Html.LabelFor(x => x.Gender):
                                     </div>
                                 </td>
                                 <td>
@@ -97,7 +158,7 @@
                             <tr>
                                 <td>
                                     <div style="width: 120px; margin-top: 21.4px">
-                                        @Html.LabelFor(x=>x.Cities): 
+                                        @Html.LabelFor(x => x.Cities):
                                     </div>
                                 </td>
                                 <td>
@@ -116,12 +177,12 @@
                             <tr>
                                 <td>
                                     <div style="width: 120px; margin-top: 21.4px">
-                                        @Html.LabelFor(x => x.Age): 
+                                        @Html.LabelFor(x => x.Age):
                                     </div>
                                 </td>
                                 <td>
-                                    <div>
-                                        @(Model.Age == 0 ? "" : Model.Age.ToString())
+                                    <div style="background-color:gold">
+                                        @(Model.Age == 0 ? "" : Model.Age.ToString() + " yaşındasınız.")
                                     </div>
                                 </td>
                             </tr>
@@ -130,8 +191,8 @@
                                     <form class="form-group" method="post">
                                         <div>
                                             @*<a href="/Person/Calculate/@Model" class="btn btn-success">Hesapla</a>*@
-                                            <input class="form-control" id="Hesapla" name="Hesapla" type="submit" value="Hesapla" 
-                                                   onclick="location.href='@Url.Action("Calculate", "Person",Model)'"/>
+                                            <input class="form-control" id="Hesapla" name="Hesapla" type="submit" value="Hesapla"
+                                                   onclick="location.href='@Url.Action("Calculate", "Person",Model)'" />
                                         </div>
                                     </form>
                                 </td>
@@ -141,76 +202,9 @@
                 </tr>
             </table>
         </div>
-        <script>
-
-            $('#BirthDate').datepicker({
-                changeMonth: true, changeYear: true,
-                minDate: '01/01/1900', maxDate: new Date
-            });
-
-            if ($("#BirthDate").val() != '') {
-                var arrDate = $('#BirthDate').val().split(" ");
-                $('#BirthDate').val(arrDate[0]);
-            }
-            
-
-            /*  ==========================================
-                SHOW UPLOADED IMAGE
-            * ========================================== */
-            function readURL(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        $('#imageResult')
-                            .attr('src', e.target.result);
-                    };
-                    reader.readAsDataURL(input.files[0]);
-                }
-                else {
-                    $('#imageResult').attr('src', "~/Images/icon.jpg");
-                }
-            }
-
-            $('#myForm').submit(function () {
-                // DO STUFF...
-                var result = checkFileSize(document.getElementById("imageResult"));
-                console.log(result);
-                return result; // return false to cancel form action
-            });
-
-            $(function () {
-                $('#upload').on('change', function () {
-                    readURL(input);
-                });
-            });
-
-            /*  ==========================================
-                SHOW UPLOADED IMAGE NAME
-            * ========================================== */
-            var input = document.getElementById('upload');
-            var infoArea = document.getElementById('upload-label');
-
-            input.addEventListener('change', showFileName);
-            function showFileName(event) {
-                var input = event.srcElement;
-                var fileName = input.files[0].name;
-                infoArea.textContent = 'File name: ' + fileName ?? "yok usta";
-            }
-
-            function checkFileSize(input) {
-                var size = input.files[0].size;
-
-                if (size > 52.42880) {
-                    return false;
-                }
-                return true;
-            }
-
-        </script>
     }
 
-    </body>
+</body>
 </html>
 
 
