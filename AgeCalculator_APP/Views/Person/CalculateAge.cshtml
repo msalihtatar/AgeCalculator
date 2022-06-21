@@ -75,11 +75,11 @@
                     alert("Yüklenen dosyanın boyutu en fazla 5 Mb olmalıdır.");
                 }
             }
-            if (!onlyLetters($("#txtName").val())) {
+            if (onlyLetters($("#txtName").val())) {
                 result = false;
                 alert("Adınız rakam içeremez!")
             }
-            if (!onlyLetters($("#txtSurname").val())) {
+            if (onlyLetters($("#txtSurname").val())) {
                 result = false;
                 alert("Soyadınız rakam içeremez!")
             }
@@ -89,7 +89,7 @@
             return result;
         }
         function onlyLetters(str) {
-            return /^[a-zA-Z]+$/.test(str);
+            return /[^a-zA-Z' '^wığüşöçĞÜŞÖÇİ]/g.test(str);
         }
     </script>
 </head>
