@@ -4,6 +4,7 @@ using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Business.Abstract
 {
@@ -14,5 +15,6 @@ namespace Business.Abstract
         IDataResult<Person> GetByPersonID(int personID);
         IDataResult<PersonDetailDTO> GetPersonDetailsByID(int personID);
         IDataResult<List<PersonDetailDTO>> GetAllPersonDetails();
+        Task<IDataResult<List<PersonDetailDTO>>> GetAllPersonDetailsAsync();
     }
 }

@@ -31,6 +31,7 @@
                     });
                 }
             });
+
         });
 
         function drawChart(result) {
@@ -52,7 +53,7 @@
             };
 
             var columnChart = new google.visualization.ColumnChart(document
-                .getElementById('Barchart_div'));
+                .getElementById('barchart_div'));
 
             columnChart.draw(data, columnChartOptions);
         }
@@ -61,7 +62,7 @@
 </head>
 <body>
     <div>
-        <div id="Barchart_div"></div>
+        <div id="barchart_div"></div>
     </div>
 </body>
 </html>

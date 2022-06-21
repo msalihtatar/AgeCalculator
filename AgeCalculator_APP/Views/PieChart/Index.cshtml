@@ -27,13 +27,27 @@
                         'packages': ['corechart']
                     });
                     google.charts.setOnLoadCallback(function () {
-                        drawChart(result);
+                        drawPieChart(result);
+                    });
+                }
+            });
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: '@Url.Action("VisualizeAgeMeanResult", "BarChart")',
+                success: function (result) {
+                    google.charts.load('current', {
+                        'packages': ['corechart']
+                    });
+                    google.charts.setOnLoadCallback(function () {
+                        drawBarChart(result);
                     });
                 }
             });
         });
 
-        function drawChart(result) {
+        function drawPieChart(result) {
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Cinsiyet');
             data.addColumn('number', 'Kişi Sayısı');
@@ -46,19 +60,53 @@
 
             var columnChartOptions = {
                 title: "Cinsiyete Göre Kayıtlı Kişilerin Oranı - Pie Chart",
-                width: 1000,
-                height: 750,
+                width: 500,
+                height: 550,
+                is3D: true,
                 bar: { groupWidth: "20%" },
             };
 
             var columnChart = new google.visualization.PieChart(document
-                .getElementById('Piechart_div'));
+                .getElementById('piechart_div'));
+
+            columnChart.draw(data, columnChartOptions);
+        }
+
+        function drawBarChart(result) {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Yaş Aralığı');
+            data.addColumn('number', 'Yaş Ortalaması');
+            var dataArray = [];
+
+            $.each(result, function (i, obj) {
+                dataArray.push([obj.range, obj.mean]);
+            });
+            data.addRows(dataArray);
+
+            var columnChartOptions = {
+                title: "Aralıklara Göre Yaş Ortalaması - Bar Chart",
+                width: 500,
+                height: 550,
+                bar: { groupWidth: "20%" },
+            };
+
+            var columnChart = new google.visualization.ColumnChart(document
+                .getElementById('barchart_div'));
 
             columnChart.draw(data, columnChartOptions);
         }
     </script>
 </head>
 <body>
-    <div id="Piechart_div"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <div id="piechart_div"></div>
+            </div>
+            <div class="col-6">
+                <div id="barchart_div"></div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

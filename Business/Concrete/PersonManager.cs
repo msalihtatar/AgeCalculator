@@ -6,6 +6,7 @@ using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Business.Concrete
 {
@@ -84,6 +85,26 @@ namespace Business.Concrete
             }
         }
 
+        public async Task<IDataResult<List<PersonDetailDTO>>> GetAllPersonDetailsAsync()
+        {
+            try
+            {
+                var personList = await _personDal.GetAllPersonDetailsAsync();
+                if (personList != null && personList.Count > 0)
+                {
+                    return new SuccessDataResult<List<PersonDetailDTO>>(personList,"Kişiler getirildi.");
+                }
+                else
+                {
+                    return new ErrorDataResult<List<PersonDetailDTO>>("Kişi bulunamadı.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public IDataResult<List<PersonDetailDTO>> GetAllPersonDetails()
         {
             try
@@ -91,7 +112,7 @@ namespace Business.Concrete
                 var personList = _personDal.GetAllPersonDetails();
                 if (personList != null && personList.Count > 0)
                 {
-                    return new SuccessDataResult<List<PersonDetailDTO>>(personList,"Kişiler getirildi.");
+                    return new SuccessDataResult<List<PersonDetailDTO>>(personList, "Kişiler getirildi.");
                 }
                 else
                 {

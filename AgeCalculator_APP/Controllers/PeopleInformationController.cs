@@ -33,7 +33,7 @@ namespace AgeCalculator_APP.Controllers
                     BirthDate = x.BirthDate,
                     CityName = cityList.Data.Where(y => y.CityID == x.CityID).Select(z => z.CityName).FirstOrDefault(),
                     Age = x.Age,
-                    Gender = x.Gender
+                    GenderName = x.Gender == 1 ? "Kadın" : "Erkek"
                 };
 
                 personModelList.Add(person);

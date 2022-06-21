@@ -8,7 +8,7 @@
 <table id="table1" class="table table-bordered">
     <thead>
         <tr>
-            <th>Kişi ID</th>
+            <th>Kayıt No</th>
             <th>Ad</th>
             <th>Soyad</th>
             <th>Cinsiyet</th>
@@ -17,15 +17,16 @@
             <th>Şehir</th>
         </tr>
     </thead>
+    @{int OrderNo = 1;}
     <tbody>
-        @foreach (var person in Model)
+        @foreach (var person in Model.OrderBy(x => x.PersonID))
         {
             <tr>
-                <th>@person.PersonID</th>
+                <th>@(OrderNo++)</th>
                 <td>@person.Name</td>
                 <td>@person.Surname</td>
-                <td>@person.Gender</td>
-                <td>@person.BirthDate</td>
+                <td>@person.GenderName</td>
+                <td>@person.BirthDate.Value</td>
                 <td>@person.Age</td>
                 <td>@person.CityName</td>
             </tr>

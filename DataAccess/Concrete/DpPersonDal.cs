@@ -2,11 +2,13 @@
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DataAccess.Concrete
 {
@@ -57,14 +59,34 @@ namespace DataAccess.Concrete
             }
         }
 
+        public async Task<List<PersonDetailDTO>> GetAllPersonDetailsAsync()
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_dbConnection.ConnectionString))
+                {
+                    await conn.OpenAsync();
+                    string sql = @"Select * from Person p
+                               Inner Join City c on c.CityID = p.CityID";
+                    var personList = (await conn.QueryAsync<PersonDetailDTO>(sql)).ToList();
+
+                    return personList;
+                }                
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public List<PersonDetailDTO> GetAllPersonDetails()
         {
             try
             {
                 string sql = @"Select * from Person p
-                               Inner Join City c on c.CityID = p.CityID";
-
+                            Inner Join City c on c.CityID = p.CityID";
                 var personList = _dbConnection.Query<PersonDetailDTO>(sql).ToList();
+
                 return personList;
             }
             catch (Exception ex)

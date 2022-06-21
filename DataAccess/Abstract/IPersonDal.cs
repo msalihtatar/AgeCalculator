@@ -3,6 +3,7 @@ using Entities.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DataAccess.Abstract
 {
@@ -12,6 +13,8 @@ namespace DataAccess.Abstract
         List<Person> GetAll();
         Person GetByPersonID(int personID);
         PersonDetailDTO GetPersonDetailsByID(int personID);
+        Task<List<PersonDetailDTO>> GetAllPersonDetailsAsync();
+
         List<PersonDetailDTO> GetAllPersonDetails();
     }
 }

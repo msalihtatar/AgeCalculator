@@ -39,5 +39,6 @@ namespace AgeCalculator_APP.Models.Entity
         [Required(ErrorMessage = "Cinsiyet seçiniz.")]
         [Display(Name = "Cinsiyet")]
         public int Gender { get; set; }
+        public string GenderName { get; set; }
     }
 }
