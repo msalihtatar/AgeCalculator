@@ -24,7 +24,6 @@
             SHOW UPLOADED IMAGE
         * ========================================== */
 
-
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
@@ -50,14 +49,47 @@
         /*  ==========================================
             SHOW UPLOADED IMAGE NAME
         * ========================================== */
-        var input = document.getElementById('upload');
+        var input = document.getElementById('upload-img');
         var infoArea = document.getElementById('upload-label');
+        let besMb = 5242880;
 
         input.addEventListener('change', showFileName);
         function showFileName(event) {
             var input = event.srcElement;
             var fileName = input.files[0].name;
-            infoArea.textContent = 'File name: ' + fileName ?? "yok usta";
+            infoArea.textContent = 'File name: ' + fileName ?? "file yok";
+        }
+
+        function validateMyForm(ev) {
+            var result = true;
+
+            if ($("#control-birthdate").val() && new Date($("#control-birthdate").val()) > new Date()) {
+                result = false;
+                alert("Doğum tarihiniz bugünden ileri bir tarih olamaz!")
+            }
+            var myInput = document.getElementById('upload-img')
+            if (myInput.files.length > 0) {
+                let size = myInput.files[0].size;
+                if (size > besMb) {
+                    result = false;
+                    alert("Yüklenen dosyanın boyutu en fazla 5 Mb olmalıdır.");
+                }
+            }
+            if (!onlyLetters($("#txtName").val())) {
+                result = false;
+                alert("Adınız rakam içeremez!")
+            }
+            if (!onlyLetters($("#txtSurname").val())) {
+                result = false;
+                alert("Soyadınız rakam içeremez!")
+            }
+            if (!result) {
+                ev.preventDefault();
+            }
+            return result;
+        }
+        function onlyLetters(str) {
+            return /^[a-zA-Z]+$/.test(str);
         }
     </script>
 </head>
@@ -73,7 +105,7 @@
         </div>
         <hr />
     </div>
-    @using (Html.BeginForm("Calculate", "Person", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @using (Html.BeginForm("Calculate", "Person", FormMethod.Post, new { enctype = "multipart/form-data", onsubmit = "return validateMyForm(event);" }))
     {
         <div>
             <table>
@@ -89,7 +121,8 @@
                                 {
                                     @class = "form-control",
                                     @type = "file",
-                                    @onchange = "readURL(this)"
+                                    @onchange = "readURL(this)",
+                                    @id = "upload-img"
 
                                 }
                             })
@@ -111,7 +144,7 @@
                                 </td>
                                 <td>
                                     <div>
-                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @id = "txtName" })
                                         @Html.ValidationMessageFor(m => m.Name, "", new { @style = "color:red" })
                                     </div>
                                 </td>
@@ -124,7 +157,7 @@
                                 </td>
                                 <td>
                                     <div>
-                                        @Html.TextBoxFor(m => m.Surname, new { @class = "form-control" })
+                                        @Html.TextBoxFor(m => m.Surname, new { @class = "form-control", @id = "txtSurname" })
                                         @Html.ValidationMessageFor(m => m.Surname, "", new { @style = "color:red" })
                                     </div>
                                 </td>
@@ -137,7 +170,7 @@
                                 </td>
                                 <td>
                                     <div>
-                                        @Html.TextBoxFor(model => model.BirthDate, new { @type = "date", @class = "form-control datepicker", @Value = Model.BirthDate.ToString() })
+                                        @Html.TextBoxFor(model => model.BirthDate, new { @type = "date", @class = "form-control datepicker", @Value = Model.BirthDate.ToString(), @id="control-birthdate" })
                                         @Html.ValidationMessageFor(m => m.BirthDate, "", new { @style = "color:red" })
                                     </div>
                                 </td>
@@ -150,7 +183,7 @@
                                 </td>
                                 <td>
                                     <div>
-                                        <select class="form-control" id="Gender" name="Gender" type="" value="">
+                                        <select class="form-control" id="Gender" name="Gender" type="" value="@(Model.Gender)" >
                                             <option value="1">Kadın</option>
                                             <option value="2">Erkek</option>
                                         </select>
@@ -194,7 +227,8 @@
                                         <div>
                                             @*<a href="/Person/Calculate/@Model" class="btn btn-success">Hesapla</a>*@
                                             <input class="form-control" id="Hesapla" name="Hesapla" type="submit" value="Hesapla"
-                                                   onclick="location.href='@Url.Action("Calculate", "Person",Model)'" />
+                                                   @*onclick="location.href='@Url.Action("Calculate", "Person",Model)'"*@
+                                                   />
                                         </div>
                                     </form>
                                 </td>

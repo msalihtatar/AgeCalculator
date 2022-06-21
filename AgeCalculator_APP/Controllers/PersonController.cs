@@ -84,6 +84,7 @@ namespace AgeCalculator_APP.Controllers
             if (result.Success)
             {
                 personModel.Age = result.Data;
+                personModel.Gender = personViewModel.Gender;
             }
 
             return View("CalculateAge",personModel);
